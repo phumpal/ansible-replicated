@@ -1,0 +1,13 @@
+- include: CentOS.yml
+  when: ansible_distribution == "CentOS"
+
+- include: Ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
+
+- name: configure logrotate
+  copy: 
+    src: logrotate
+    dest: /etc/logrotate.d/replicated
+    owner: root
+    group: root
+    mode: 0644

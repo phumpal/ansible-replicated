@@ -1,0 +1,25 @@
+- name: downloads replicated key 
+  command: "{{ item }}"
+  with_items:
+    - gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 822819BB
+    - gpg --export -a 822819BB > /tmp/replicated_pub.asc
+
+- name: imports replicated gpg key
+  rpm_key: 
+    state: present
+    key: /tmp/replicated_pub.asc
+
+- name: configures replicated yum repo
+  template: 
+    src: replicated.repo.j2
+    dest: /etc/yum.repos.d/replicated.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: installs replicated
+  yum: name={{ item }} state=present 
+  with_items: 
+    - replicated
+    - replicated-ui
+    - replicated-updater

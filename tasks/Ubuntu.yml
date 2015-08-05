@@ -1,0 +1,14 @@
+- name: adds apt key
+  apt_key: 
+    keyserver: keyserver.ubuntu.com 
+    id: 68386EDB2C8B75CA615A8C985D4781862AFFAC40
+
+- name: adds apt repository
+  apt_repository: repo='deb https://get.replicated.com/apt all stable'
+
+- name: installs replicated
+  apt: pkg={{ item }} state=present update-cache=yes
+  with_items:
+    - replicated
+    - replicated-ui
+    - replicated-updater
